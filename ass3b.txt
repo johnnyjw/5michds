@@ -1,0 +1,25 @@
+from pyspark import SparkConf
+from pyspark.sql import SparkSession
+def spark_session():
+    """
+    Initialize sparkSession and sets the configuration specified
+        in the config file
+
+    :return: spark session
+    """
+    conf = SparkConf() \
+        .set("spark.dynamicAllocation.initialExecutors", "8") \
+        .set("spark.dynamicAllocation.maxExecutors", "64") \
+        .set("spark.executor.memoryOverhead", "3g") \
+        .set("spark.kryoserializer.buffer.max", "1g") \
+        .set("spark.app.name", "padpmPredict") \
+        .set("spark.executor.memory", "20g") \
+        .set("spark.driver.memory", "16g") \
+        .set("spark.driver.cores", "32") \
+        .set("spark.yarn.queue", "ace")
+
+    spark = SparkSession.builder \
+        .appName("DADD").config(conf=conf) \
+        .getOrCreate()
+    spark.sparkContext.setLogLevel("FATAL")
+    return spark 
